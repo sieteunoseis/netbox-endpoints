@@ -1,1 +1,1 @@
-"""API module for NetBox Endpoints plugin."""
+"""API package for NetBox Endpoints plugin."""

@@ -1,0 +1,71 @@
+{% extends 'generic/object.html' %}
+{% load helpers %}
+{% load plugins %}
+{% load render_table from django_tables2 %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'plugins:netbox_endpoints:endpointtype_list' %}">Endpoint Types</a></li>
+<li class="breadcrumb-item"><a href="{% url 'plugins:netbox_endpoints:endpointtype_list' %}?manufacturer_id={{ object.manufacturer.pk }}">{{ object.manufacturer }}</a></li>
+<li class="breadcrumb-item">{{ object }}</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<div class="row">
+    <div class="col col-md-6">
+        <div class="card">
+            <h5 class="card-header">Endpoint Type</h5>
+            <table class="table table-hover attr-table">
+                <tr>
+                    <th scope="row">Manufacturer</th>
+                    <td>{{ object.manufacturer|linkify }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Model</th>
+                    <td>{{ object.model }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Part Number</th>
+                    <td>{{ object.part_number|placeholder }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Default Platform</th>
+                    <td>{{ object.default_platform|linkify|placeholder }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Description</th>
+                    <td>{{ object.description|placeholder }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Endpoints</th>
+                    <td>
+                        <a href="{% url 'plugins:netbox_endpoints:endpoint_list' %}?endpoint_type_id={{ object.pk }}">
+                            {{ endpoint_count }}
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        {% include 'inc/panels/custom_fields.html' %}
+        {% include 'inc/panels/tags.html' %}
+        {% include 'inc/panels/comments.html' %}
+    </div>
+
+    <div class="col col-md-6">
+        {% plugin_right_page object %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col col-md-12">
+        <div class="card">
+            <h5 class="card-header">Endpoints</h5>
+            <div class="card-body table-responsive">
+                {% render_table endpoints_table 'inc/table.html' %}
+            </div>
+        </div>
+
+        {% plugin_full_width_page object %}
+    </div>
+</div>
+{% endblock content %}

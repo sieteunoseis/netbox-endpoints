@@ -1,131 +1,166 @@
 """Views for NetBox Endpoints plugin."""
 
-import logging
+from django.db.models import Count
 
-from dcim.models import Device
-from django.shortcuts import render
-from django.views.generic import View
-from netbox.views.generic import ObjectView
-from utilities.views import ViewTab, register_model_view
-from virtualization.models import VirtualMachine
+from netbox.views import generic
 
-from .client import get_client
-
-logger = logging.getLogger(__name__)
-
-
-def should_show_tab(obj):
-    """Determine if tab should be shown for this object."""
-    # TODO: Add your logic here
-    # Example: Only show for devices with serial numbers
-    # if not obj.serial:
-    #     return False
-    return True
+from .filtersets import EndpointFilterSet, EndpointTypeFilterSet
+from .forms import (
+    EndpointBulkEditForm,
+    EndpointFilterForm,
+    EndpointForm,
+    EndpointImportForm,
+    EndpointTypeBulkEditForm,
+    EndpointTypeFilterForm,
+    EndpointTypeForm,
+    EndpointTypeImportForm,
+)
+from .models import Endpoint, EndpointType
+from .tables import EndpointTable, EndpointTypeTable
 
 
-@register_model_view(Device, "endpoints", path="endpoints")
-class DeviceEndpointsView(ObjectView):
-    """Endpoints tab view for Device detail pages."""
+#
+# EndpointType Views
+#
 
-    queryset = Device.objects.all()
-    template_name = "netbox_endpoints/device_tab.html"
-    tab = ViewTab(
-        label="Endpoints",
-        weight=9100,
-        permission="dcim.view_device",
-        hide_if_empty=False,
-        visible=should_show_tab,
+
+class EndpointTypeListView(generic.ObjectListView):
+    """List view for EndpointType objects."""
+
+    queryset = EndpointType.objects.annotate(
+        endpoint_count=Count("endpoints")
+    ).prefetch_related("manufacturer", "tags")
+    table = EndpointTypeTable
+    filterset = EndpointTypeFilterSet
+    filterset_form = EndpointTypeFilterForm
+
+
+class EndpointTypeView(generic.ObjectView):
+    """Detail view for EndpointType objects."""
+
+    queryset = EndpointType.objects.prefetch_related("manufacturer", "default_platform", "tags")
+
+    def get_extra_context(self, request, instance):
+        endpoints = Endpoint.objects.filter(endpoint_type=instance)
+        endpoints_table = EndpointTable(endpoints, user=request.user)
+        endpoints_table.configure(request)
+
+        return {
+            "endpoints_table": endpoints_table,
+            "endpoint_count": endpoints.count(),
+        }
+
+
+class EndpointTypeEditView(generic.ObjectEditView):
+    """Create/Edit view for EndpointType objects."""
+
+    queryset = EndpointType.objects.all()
+    form = EndpointTypeForm
+
+
+class EndpointTypeDeleteView(generic.ObjectDeleteView):
+    """Delete view for EndpointType objects."""
+
+    queryset = EndpointType.objects.all()
+
+
+class EndpointTypeBulkImportView(generic.BulkImportView):
+    """Bulk import view for EndpointType objects."""
+
+    queryset = EndpointType.objects.all()
+    model_form = EndpointTypeImportForm
+
+
+class EndpointTypeBulkEditView(generic.BulkEditView):
+    """Bulk edit view for EndpointType objects."""
+
+    queryset = EndpointType.objects.prefetch_related("manufacturer", "tags")
+    filterset = EndpointTypeFilterSet
+    table = EndpointTypeTable
+    form = EndpointTypeBulkEditForm
+
+
+class EndpointTypeBulkDeleteView(generic.BulkDeleteView):
+    """Bulk delete view for EndpointType objects."""
+
+    queryset = EndpointType.objects.all()
+    filterset = EndpointTypeFilterSet
+    table = EndpointTypeTable
+
+
+#
+# Endpoint Views
+#
+
+
+class EndpointListView(generic.ObjectListView):
+    """List view for Endpoint objects."""
+
+    queryset = Endpoint.objects.prefetch_related(
+        "endpoint_type",
+        "endpoint_type__manufacturer",
+        "site",
+        "location",
+        "tenant",
+        "contact",
+        "primary_ip4",
+        "tags",
+    )
+    table = EndpointTable
+    filterset = EndpointFilterSet
+    filterset_form = EndpointFilterForm
+
+
+class EndpointView(generic.ObjectView):
+    """Detail view for Endpoint objects."""
+
+    queryset = Endpoint.objects.prefetch_related(
+        "endpoint_type",
+        "endpoint_type__manufacturer",
+        "site",
+        "location",
+        "tenant",
+        "contact",
+        "platform",
+        "primary_ip4",
+        "primary_ip6",
+        "connected_interface",
+        "tags",
     )
 
-    def get(self, request, pk):
-        device = self.get_object()
 
-        # TODO: Fetch data from external service
-        client = get_client()
-        results = {}
-        error = None
+class EndpointEditView(generic.ObjectEditView):
+    """Create/Edit view for Endpoint objects."""
 
-        if client:
-            try:
-                results = client.get_data(device.name)
-            except Exception as e:
-                logger.error(f"Error fetching data for {device.name}: {e}")
-                error = str(e)
-        else:
-            error = "Plugin not configured"
-
-        return render(
-            request,
-            self.template_name,
-            {
-                "object": device,
-                "tab": self.tab,
-                "results": results,
-                "error": error,
-            },
-        )
+    queryset = Endpoint.objects.all()
+    form = EndpointForm
 
 
-@register_model_view(VirtualMachine, "endpoints", path="endpoints")
-class VMEndpointsView(ObjectView):
-    """Endpoints tab view for Virtual Machine detail pages."""
+class EndpointDeleteView(generic.ObjectDeleteView):
+    """Delete view for Endpoint objects."""
 
-    queryset = VirtualMachine.objects.all()
-    template_name = "netbox_endpoints/vm_tab.html"
-    tab = ViewTab(
-        label="Endpoints",
-        weight=9100,
-        permission="virtualization.view_virtualmachine",
-        hide_if_empty=False,
-        visible=should_show_tab,
-    )
-
-    def get(self, request, pk):
-        vm = self.get_object()
-
-        client = get_client()
-        results = {}
-        error = None
-
-        if client:
-            try:
-                results = client.get_data(vm.name)
-            except Exception as e:
-                logger.error(f"Error fetching data for {vm.name}: {e}")
-                error = str(e)
-        else:
-            error = "Plugin not configured"
-
-        return render(
-            request,
-            self.template_name,
-            {
-                "object": vm,
-                "tab": self.tab,
-                "results": results,
-                "error": error,
-            },
-        )
+    queryset = Endpoint.objects.all()
 
 
-class SettingsView(View):
-    """Plugin settings page."""
+class EndpointBulkImportView(generic.BulkImportView):
+    """Bulk import view for Endpoint objects."""
 
-    template_name = "netbox_endpoints/settings.html"
+    queryset = Endpoint.objects.all()
+    model_form = EndpointImportForm
 
-    def get(self, request):
-        client = get_client()
-        connection_status = None
 
-        if client:
-            # TODO: Test connection
-            pass
+class EndpointBulkEditView(generic.BulkEditView):
+    """Bulk edit view for Endpoint objects."""
 
-        return render(
-            request,
-            self.template_name,
-            {
-                "configured": client is not None,
-                "connection_status": connection_status,
-            },
-        )
+    queryset = Endpoint.objects.prefetch_related("endpoint_type", "site", "tags")
+    filterset = EndpointFilterSet
+    table = EndpointTable
+    form = EndpointBulkEditForm
+
+
+class EndpointBulkDeleteView(generic.BulkDeleteView):
+    """Bulk delete view for Endpoint objects."""
+
+    queryset = Endpoint.objects.all()
+    filterset = EndpointFilterSet
+    table = EndpointTable

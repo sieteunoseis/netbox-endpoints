@@ -1,0 +1,132 @@
+{% extends 'generic/object.html' %}
+{% load helpers %}
+{% load plugins %}
+{% load render_table from django_tables2 %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'plugins:netbox_endpoints:endpoint_list' %}">Endpoints</a></li>
+<li class="breadcrumb-item"><a href="{% url 'plugins:netbox_endpoints:endpoint_list' %}?endpoint_type_id={{ object.endpoint_type.pk }}">{{ object.endpoint_type }}</a></li>
+<li class="breadcrumb-item">{{ object }}</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<div class="row">
+    <div class="col col-md-6">
+        <div class="card">
+            <h5 class="card-header">Endpoint</h5>
+            <table class="table table-hover attr-table">
+                <tr>
+                    <th scope="row">MAC Address</th>
+                    <td><span class="font-monospace">{{ object.mac_address }}</span></td>
+                </tr>
+                <tr>
+                    <th scope="row">Name</th>
+                    <td>{{ object.name|placeholder }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Type</th>
+                    <td>{{ object.endpoint_type|linkify }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Manufacturer</th>
+                    <td>{{ object.endpoint_type.manufacturer|linkify }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Serial Number</th>
+                    <td>{{ object.serial|placeholder }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Asset Tag</th>
+                    <td>{{ object.asset_tag|placeholder }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Status</th>
+                    <td>{% badge object.get_status_display bg_color=object.get_status_color %}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h5 class="card-header">Location</h5>
+            <table class="table table-hover attr-table">
+                <tr>
+                    <th scope="row">Site</th>
+                    <td>{{ object.site|linkify }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Location</th>
+                    <td>{{ object.location|linkify|placeholder }}</td>
+                </tr>
+                {% if object.site.region %}
+                <tr>
+                    <th scope="row">Region</th>
+                    <td>{{ object.site.region|linkify }}</td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+
+        <div class="card">
+            <h5 class="card-header">Assignment</h5>
+            <table class="table table-hover attr-table">
+                <tr>
+                    <th scope="row">Tenant</th>
+                    <td>{{ object.tenant|linkify|placeholder }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Contact</th>
+                    <td>{{ object.contact|linkify|placeholder }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Platform</th>
+                    <td>{{ object.platform|linkify|placeholder }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="col col-md-6">
+        <div class="card">
+            <h5 class="card-header">Network</h5>
+            <table class="table table-hover attr-table">
+                <tr>
+                    <th scope="row">Connection Type</th>
+                    <td>{% badge object.get_connection_type_display bg_color=object.get_connection_type_color %}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Primary IPv4</th>
+                    <td>{{ object.primary_ip4|linkify|placeholder }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Primary IPv6</th>
+                    <td>{{ object.primary_ip6|linkify|placeholder }}</td>
+                </tr>
+                {% if object.connection_type == 'wired' %}
+                <tr>
+                    <th scope="row">Connected Interface</th>
+                    <td>{{ object.connected_interface|linkify|placeholder }}</td>
+                </tr>
+                {% endif %}
+                {% if object.connection_type == 'wireless' %}
+                <tr>
+                    <th scope="row">SSID</th>
+                    <td>{{ object.ssid|placeholder }}</td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+
+        {% include 'inc/panels/custom_fields.html' %}
+        {% include 'inc/panels/tags.html' %}
+        {% include 'inc/panels/comments.html' %}
+
+        {% plugin_right_page object %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col col-md-12">
+        {% plugin_full_width_page object %}
+    </div>
+</div>
+{% endblock content %}

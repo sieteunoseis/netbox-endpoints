@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "netbox-endpoints"
 version = "0.1.0"
-description = "NetBox plugin for endpoints integration"
+description = "NetBox plugin for managing wireless and wired endpoints (badges, phones, IoT devices)"
 readme = "README.md"
 license = {text = "Apache-2.0"}
 requires-python = ">=3.10"
@@ -24,9 +24,7 @@ classifiers = [
 ]
 keywords = ["netbox", "netbox-plugin", "endpoints"]
 
-dependencies = [
-    "requests>=2.25.0",
-]
+dependencies = []
 
 [project.optional-dependencies]
 dev = [

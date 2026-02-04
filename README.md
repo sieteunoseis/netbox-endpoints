@@ -1,19 +1,42 @@
 # NetBox Endpoints Plugin
 
-<img src="docs/icon.png" alt="NetBox Endpoints Plugin" width="100" align="right">
-
-A NetBox plugin for Endpoints integration.
+A NetBox plugin for managing wireless and wired endpoints (badges, phones, IoT devices) that don't fit the traditional Device model.
 
 ![NetBox Version](https://img.shields.io/badge/NetBox-4.0+-blue)
 ![Python Version](https://img.shields.io/badge/Python-3.10+-green)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![PyPI](https://img.shields.io/pypi/v/netbox-endpoints)](https://pypi.org/project/netbox-endpoints/)
 
+## Overview
+
+The Endpoints plugin provides dedicated models for mobile/endpoint devices that don't fit the traditional NetBox Device model:
+
+- **Vocera badges** - Wireless communication badges
+- **Cisco IP phones** - Desk phones, wireless phones
+- **IoT devices** - Sensors, controllers, etc.
+- **Tablets/mobile devices** - iPads, scanners, etc.
+
+Unlike Devices, Endpoints:
+- Don't require rack locations
+- Have MAC address as primary identifier
+- Support wireless (SSID) and wired (switch port) connections
+- Track connection type and status independently
+
 ## Features
 
-- **Device Tab** - Adds a "Endpoints" tab to Device detail pages
-- **VM Tab** - Same functionality for Virtual Machines
-- **Caching** - API responses are cached to improve performance
+- **Endpoint Types** - Define endpoint models (like DeviceType but for endpoints)
+- **Endpoints** - Track individual endpoint devices with:
+  - MAC address (required, unique)
+  - Name, serial number, asset tag
+  - Site and location
+  - Primary IPv4/IPv6 (FK to IPAddress)
+  - Connection type (wireless/wired)
+  - SSID (wireless) or connected interface (wired)
+  - Tenant, contact, platform
+  - Status (active, offline, staged, decommissioned)
+  - Full tag and custom field support
+- **Plugin Integration** - Other plugins can add tabs to endpoint detail pages
+- **REST API** - Full API access at `/api/plugins/netbox-endpoints/`
 
 ## Requirements
 
@@ -58,29 +81,47 @@ PLUGINS = [
 
 PLUGINS_CONFIG = {
     'netbox_endpoints': {
-        # TODO: Add your settings
-        'timeout': 30,
-        'cache_timeout': 300,
-        'verify_ssl': True,
+        # No configuration required - endpoints are stored in NetBox
     }
 }
 ```
 
 ## Usage
 
-Once installed and configured:
+### Creating Endpoint Types
 
-1. Navigate to any Device in NetBox
-2. Click the **Endpoints** tab
-3. View data from Endpoints
+1. Navigate to **Plugins > Endpoints > Endpoint Types**
+2. Click **Add**
+3. Select manufacturer and enter model name
+4. Optionally set default platform
 
-## Troubleshooting
+### Creating Endpoints
 
-### Connection errors
+1. Navigate to **Plugins > Endpoints > Endpoints**
+2. Click **Add**
+3. Enter MAC address (required)
+4. Select endpoint type, site, and other details
+5. Set connection type (wireless/wired)
+6. For wireless: enter SSID
+7. For wired: select connected interface
 
-- Verify API URL is accessible from NetBox container
-- Check that credentials are correct
-- For self-signed certificates, set `verify_ssl: False`
+### API Access
+
+```bash
+# List endpoints
+curl -X GET "https://netbox.example.com/api/plugins/netbox-endpoints/endpoints/" \
+  -H "Authorization: Token $TOKEN"
+
+# Create endpoint
+curl -X POST "https://netbox.example.com/api/plugins/netbox-endpoints/endpoints/" \
+  -H "Authorization: Token $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"mac_address": "00:11:22:33:44:55", "endpoint_type": 1, "site": 1}'
+```
+
+## Plugin Integration
+
+Other plugins (like netbox-catalyst-center) can register tabs on Endpoint detail pages using the standard NetBox `@register_model_view` decorator.
 
 ## Development
 

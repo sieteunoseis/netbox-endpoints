@@ -1,5 +1,11 @@
 """API URL configuration for NetBox Endpoints plugin."""
 
-from django.urls import path
+from netbox.api.routers import NetBoxRouter
 
-urlpatterns = []
+from . import views
+
+router = NetBoxRouter()
+router.register("endpoint-types", views.EndpointTypeViewSet)
+router.register("endpoints", views.EndpointViewSet)
+
+urlpatterns = router.urls
