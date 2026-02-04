@@ -1,16 +1,19 @@
 """Forms for NetBox Endpoints plugin."""
 
+from dcim.models import Device, Interface, Location, Manufacturer, Platform, Site
 from django import forms
-
-from dcim.models import Device, Interface, Manufacturer, Platform, Site, Location
 from ipam.models import IPAddress
-from netbox.forms import NetBoxModelForm, NetBoxModelFilterSetForm, NetBoxModelImportForm, NetBoxModelBulkEditForm
+from netbox.forms import NetBoxModelBulkEditForm, NetBoxModelFilterSetForm, NetBoxModelForm, NetBoxModelImportForm
 from tenancy.models import Contact, Tenant
-from utilities.forms.fields import CommentField, DynamicModelChoiceField, DynamicModelMultipleChoiceField, TagFilterField
+from utilities.forms.fields import (
+    CommentField,
+    DynamicModelChoiceField,
+    DynamicModelMultipleChoiceField,
+    TagFilterField,
+)
 from utilities.forms.rendering import FieldSet
 
-from .models import Endpoint, EndpointType, EndpointStatusChoices, EndpointConnectionTypeChoices
-
+from .models import Endpoint, EndpointConnectionTypeChoices, EndpointStatusChoices, EndpointType
 
 #
 # EndpointType Forms

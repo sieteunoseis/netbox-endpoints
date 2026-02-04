@@ -1,10 +1,9 @@
 """Models for NetBox Endpoints plugin."""
 
+from dcim.models import Device, Interface, Location, Manufacturer, Platform, Site
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.urls import reverse
-
-from dcim.models import Device, Manufacturer, Platform, Site, Location, Interface
 from ipam.models import IPAddress
 from netbox.models import NetBoxModel
 from tenancy.models import Contact, Tenant

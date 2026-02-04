@@ -1,12 +1,11 @@
 """Filtersets for NetBox Endpoints plugin."""
 
 import django_filters
-
-from dcim.models import Manufacturer, Platform, Site, Location
+from dcim.models import Location, Manufacturer, Platform, Site
 from netbox.filtersets import NetBoxModelFilterSet
 from tenancy.models import Contact, Tenant
 
-from .models import Endpoint, EndpointType, EndpointStatusChoices, EndpointConnectionTypeChoices
+from .models import Endpoint, EndpointConnectionTypeChoices, EndpointStatusChoices, EndpointType
 
 
 class EndpointTypeFilterSet(NetBoxModelFilterSet):
@@ -34,9 +33,7 @@ class EndpointTypeFilterSet(NetBoxModelFilterSet):
         from django.db.models import Q
 
         return queryset.filter(
-            Q(model__icontains=value)
-            | Q(part_number__icontains=value)
-            | Q(manufacturer__name__icontains=value)
+            Q(model__icontains=value) | Q(part_number__icontains=value) | Q(manufacturer__name__icontains=value)
         )
 
 

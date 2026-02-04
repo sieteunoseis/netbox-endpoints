@@ -1,7 +1,6 @@
 """Views for NetBox Endpoints plugin."""
 
 from django.db.models import Count
-
 from netbox.views import generic
 
 from .filtersets import EndpointFilterSet, EndpointTypeFilterSet
@@ -18,7 +17,6 @@ from .forms import (
 from .models import Endpoint, EndpointType
 from .tables import EndpointTable, EndpointTypeTable
 
-
 #
 # EndpointType Views
 #
@@ -27,9 +25,7 @@ from .tables import EndpointTable, EndpointTypeTable
 class EndpointTypeListView(generic.ObjectListView):
     """List view for EndpointType objects."""
 
-    queryset = EndpointType.objects.annotate(
-        endpoint_count=Count("endpoints")
-    ).prefetch_related("manufacturer", "tags")
+    queryset = EndpointType.objects.annotate(endpoint_count=Count("endpoints")).prefetch_related("manufacturer", "tags")
     table = EndpointTypeTable
     filterset = EndpointTypeFilterSet
     filterset_form = EndpointTypeFilterForm

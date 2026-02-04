@@ -24,17 +24,13 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigAutoField(
-                        auto_created=True, primary_key=True, serialize=False
-                    ),
+                    models.BigAutoField(auto_created=True, primary_key=True, serialize=False),
                 ),
                 ("created", models.DateTimeField(auto_now_add=True, null=True)),
                 ("last_updated", models.DateTimeField(auto_now=True, null=True)),
                 (
                     "custom_field_data",
-                    models.JSONField(
-                        blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder
-                    ),
+                    models.JSONField(blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder),
                 ),
                 ("model", models.CharField(max_length=100)),
                 ("part_number", models.CharField(blank=True, max_length=50)),
@@ -61,9 +57,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "tags",
-                    taggit.managers.TaggableManager(
-                        through="extras.TaggedItem", to="extras.Tag"
-                    ),
+                    taggit.managers.TaggableManager(through="extras.TaggedItem", to="extras.Tag"),
                 ),
             ],
             options={
@@ -78,17 +72,13 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigAutoField(
-                        auto_created=True, primary_key=True, serialize=False
-                    ),
+                    models.BigAutoField(auto_created=True, primary_key=True, serialize=False),
                 ),
                 ("created", models.DateTimeField(auto_now_add=True, null=True)),
                 ("last_updated", models.DateTimeField(auto_now=True, null=True)),
                 (
                     "custom_field_data",
-                    models.JSONField(
-                        blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder
-                    ),
+                    models.JSONField(blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder),
                 ),
                 (
                     "mac_address",
@@ -230,9 +220,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "tags",
-                    taggit.managers.TaggableManager(
-                        through="extras.TaggedItem", to="extras.Tag"
-                    ),
+                    taggit.managers.TaggableManager(through="extras.TaggedItem", to="extras.Tag"),
                 ),
             ],
             options={

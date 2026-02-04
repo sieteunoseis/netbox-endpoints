@@ -1,8 +1,7 @@
 """Tables for NetBox Endpoints plugin."""
 
 import django_tables2 as tables
-
-from netbox.tables import NetBoxTable, ChoiceFieldColumn, columns
+from netbox.tables import ChoiceFieldColumn, NetBoxTable, columns
 
 from .models import Endpoint, EndpointType
 

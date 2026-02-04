@@ -1,11 +1,16 @@
 """API serializers for NetBox Endpoints plugin."""
 
-from rest_framework import serializers
-
-from dcim.api.serializers import ManufacturerSerializer, PlatformSerializer, SiteSerializer, LocationSerializer, InterfaceSerializer
+from dcim.api.serializers import (
+    InterfaceSerializer,
+    LocationSerializer,
+    ManufacturerSerializer,
+    PlatformSerializer,
+    SiteSerializer,
+)
 from ipam.api.serializers import IPAddressSerializer
 from netbox.api.serializers import NetBoxModelSerializer
-from tenancy.api.serializers import TenantSerializer, ContactSerializer
+from rest_framework import serializers
+from tenancy.api.serializers import ContactSerializer, TenantSerializer
 
 from ..models import Endpoint, EndpointType
 
@@ -13,9 +18,7 @@ from ..models import Endpoint, EndpointType
 class EndpointTypeSerializer(NetBoxModelSerializer):
     """Serializer for EndpointType."""
 
-    url = serializers.HyperlinkedIdentityField(
-        view_name="plugins-api:netbox_endpoints-api:endpointtype-detail"
-    )
+    url = serializers.HyperlinkedIdentityField(view_name="plugins-api:netbox_endpoints-api:endpointtype-detail")
     endpoint_count = serializers.IntegerField(read_only=True)
 
     class Meta:
@@ -42,9 +45,7 @@ class EndpointTypeSerializer(NetBoxModelSerializer):
 class EndpointSerializer(NetBoxModelSerializer):
     """Serializer for Endpoint."""
 
-    url = serializers.HyperlinkedIdentityField(
-        view_name="plugins-api:netbox_endpoints-api:endpoint-detail"
-    )
+    url = serializers.HyperlinkedIdentityField(view_name="plugins-api:netbox_endpoints-api:endpoint-detail")
 
     class Meta:
         model = Endpoint

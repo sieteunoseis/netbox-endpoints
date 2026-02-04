@@ -1,7 +1,6 @@
 """URL configuration for NetBox Endpoints plugin."""
 
 from django.urls import include, path
-
 from netbox.views.generic import ObjectChangeLogView, ObjectJournalView
 
 from . import models, views
@@ -119,24 +118,25 @@ urlpatterns = [
     ),
 ]
 
+
 # Add URL patterns for views registered by other plugins
 # These are added dynamically when those plugins register their views
 def get_extra_urlpatterns():
     """Get URL patterns for views registered by other plugins."""
-    from utilities.views import registry
     from django.urls import path
+    from utilities.views import registry
 
     extra_patterns = []
-    views_dict = registry.get('views', {})
-    endpoint_views = views_dict.get('netbox_endpoints', {}).get('endpoint', [])
+    views_dict = registry.get("views", {})
+    endpoint_views = views_dict.get("netbox_endpoints", {}).get("endpoint", [])
 
     for view_config in endpoint_views:
-        name = view_config.get('name')
-        view_path = view_config.get('path')
-        view_class = view_config.get('view')
+        name = view_config.get("name")
+        view_path = view_config.get("path")
+        view_class = view_config.get("view")
 
         # Skip built-in views (journal, changelog)
-        if name in ('journal', 'changelog'):
+        if name in ("journal", "changelog"):
             continue
 
         # Add URL pattern for this view
@@ -144,6 +144,7 @@ def get_extra_urlpatterns():
             # Import the view class if it's a string
             if isinstance(view_class, str):
                 from django.utils.module_loading import import_string
+
                 view_class = import_string(view_class)
 
             extra_patterns.append(
@@ -155,6 +156,7 @@ def get_extra_urlpatterns():
             )
 
     return extra_patterns
+
 
 # Extend urlpatterns with dynamically registered views
 try:
