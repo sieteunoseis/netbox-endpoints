@@ -8,17 +8,17 @@ traditional Device model (no rack location, dynamic IPs, etc.).
 
 from netbox.plugins import PluginConfig
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 
 class EndpointsConfig(PluginConfig):
     """Plugin configuration for NetBox Endpoints."""
 
     name = "netbox_endpoints"
-    verbose_name = "Endpoints"
+    verbose_name = "NetBox Endpoints"
     description = "Manage wireless and wired endpoints (badges, phones, IoT devices)"
     version = __version__
-    author = "sieteunoseis"
+    author = "Jeremy Worden"
     author_email = "jeremy.worden@gmail.com"
     base_url = "endpoints"
     min_version = "4.0.0"
