@@ -159,7 +159,7 @@ class Endpoint(NetBoxModel):
     connected_interface = models.ForeignKey(
         to=Interface,
         on_delete=models.SET_NULL,
-        related_name="connected_endpoints",
+        related_name="endpoint_connections",
         blank=True,
         null=True,
         help_text="Switch port this endpoint is connected to (for wired endpoints)",
