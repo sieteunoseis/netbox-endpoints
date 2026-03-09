@@ -10,7 +10,7 @@
   <div class="d-flex flex-wrap justify-content-center gap-3 py-2">
     {% for status in statuses %}
       <div class="text-center">
-        <span class="badge {{ status.bg_class }} {{ status.text_class }} fs-4 px-3 py-2">
+        <span class="badge {{ status.badge_class }} fs-4 px-3 py-2">
           {{ status.count }}
         </span>
         <div class="mt-1 small fw-bold text-muted">{{ status.label }}</div>

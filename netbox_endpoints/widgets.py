@@ -23,16 +23,16 @@ GROUPING_CHOICES = [
 STATUS_LABELS = {choice[0]: choice[1] for choice in EndpointStatusChoices.CHOICES}
 CONNECTION_TYPE_LABELS = {choice[0]: choice[1] for choice in EndpointConnectionTypeChoices.CHOICES}
 
-STATUS_COLORS = {
-    "active": ("bg-success", "text-dark"),
-    "offline": ("bg-secondary", "text-white"),
-    "staged": ("bg-info", "text-dark"),
-    "decommissioned": ("bg-dark", "text-white"),
+STATUS_BADGE_CLASS = {
+    "active": "text-bg-success",
+    "offline": "text-bg-secondary",
+    "staged": "text-bg-info",
+    "decommissioned": "text-bg-dark",
 }
 
-CONNECTION_TYPE_COLORS = {
-    "wireless": ("bg-primary", "text-white"),
-    "wired": ("bg-secondary", "text-white"),
+CONNECTION_TYPE_BADGE_CLASS = {
+    "wireless": "text-bg-primary",
+    "wired": "text-bg-secondary",
 }
 
 
@@ -84,14 +84,13 @@ def get_endpoints_summary_context(grouping="status"):
         for row in counts:
             status_val = row["status"]
             label = STATUS_LABELS.get(status_val, status_val)
-            bg_class, text_class = STATUS_COLORS.get(status_val, ("bg-secondary", "text-white"))
+            badge_class = STATUS_BADGE_CLASS.get(status_val, "text-bg-secondary")
             statuses.append(
                 {
                     "key": status_val,
                     "label": label,
                     "count": row["count"],
-                    "bg_class": bg_class,
-                    "text_class": text_class,
+                    "badge_class": badge_class,
                 }
             )
 
@@ -100,14 +99,13 @@ def get_endpoints_summary_context(grouping="status"):
         for row in counts:
             ct_val = row["connection_type"]
             label = CONNECTION_TYPE_LABELS.get(ct_val, ct_val)
-            bg_class, text_class = CONNECTION_TYPE_COLORS.get(ct_val, ("bg-secondary", "text-white"))
+            badge_class = CONNECTION_TYPE_BADGE_CLASS.get(ct_val, "text-bg-secondary")
             statuses.append(
                 {
                     "key": ct_val,
                     "label": label,
                     "count": row["count"],
-                    "bg_class": bg_class,
-                    "text_class": text_class,
+                    "badge_class": badge_class,
                 }
             )
 
@@ -118,25 +116,23 @@ def get_endpoints_summary_context(grouping="status"):
             .order_by("-count")[:10]
         )
         colors = [
-            ("bg-primary", "text-white"),
-            ("bg-success", "text-dark"),
-            ("bg-info", "text-dark"),
-            ("bg-warning", "text-dark"),
-            ("bg-danger", "text-white"),
-            ("bg-secondary", "text-white"),
-            ("bg-dark", "text-white"),
+            "text-bg-primary",
+            "text-bg-success",
+            "text-bg-info",
+            "text-bg-warning",
+            "text-bg-danger",
+            "text-bg-secondary",
+            "text-bg-dark",
         ]
         for i, row in enumerate(counts):
             manufacturer = row["endpoint_type__manufacturer__name"]
             model = row["endpoint_type__model"]
-            bg_class, text_class = colors[i % len(colors)]
             statuses.append(
                 {
                     "key": f"{manufacturer}_{model}",
                     "label": f"{manufacturer} {model}",
                     "count": row["count"],
-                    "bg_class": bg_class,
-                    "text_class": text_class,
+                    "badge_class": colors[i % len(colors)],
                 }
             )
 
