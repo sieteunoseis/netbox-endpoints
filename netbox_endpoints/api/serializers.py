@@ -1,16 +1,7 @@
 """API serializers for NetBox Endpoints plugin."""
 
-from dcim.api.serializers import (
-    InterfaceSerializer,
-    LocationSerializer,
-    ManufacturerSerializer,
-    PlatformSerializer,
-    SiteSerializer,
-)
-from ipam.api.serializers import IPAddressSerializer
 from netbox.api.serializers import NetBoxModelSerializer
 from rest_framework import serializers
-from tenancy.api.serializers import ContactSerializer, TenantSerializer
 
 from ..models import Endpoint, EndpointType
 

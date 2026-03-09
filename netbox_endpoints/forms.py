@@ -1,6 +1,6 @@
 """Forms for NetBox Endpoints plugin."""
 
-from dcim.models import Device, Interface, Location, Manufacturer, Platform, Site
+from dcim.models import Interface, Location, Manufacturer, Platform, Site
 from django import forms
 from ipam.models import IPAddress
 from netbox.forms import NetBoxModelBulkEditForm, NetBoxModelFilterSetForm, NetBoxModelForm, NetBoxModelImportForm

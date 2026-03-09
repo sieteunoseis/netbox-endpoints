@@ -1,6 +1,10 @@
 """Views for NetBox Endpoints plugin."""
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.views import View
 from netbox.views import generic
 
 from .filtersets import EndpointFilterSet, EndpointTypeFilterSet
@@ -160,3 +164,22 @@ class EndpointBulkDeleteView(generic.BulkDeleteView):
     queryset = Endpoint.objects.all()
     filterset = EndpointFilterSet
     table = EndpointTable
+
+
+class WidgetEndpointsSummaryContentView(LoginRequiredMixin, View):
+    """HTMX endpoint that returns endpoints summary widget content."""
+
+    def get(self, request):
+        from .widgets import get_endpoints_summary_context
+
+        grouping = request.GET.get("grouping", "status")
+
+        context = get_endpoints_summary_context(grouping=grouping)
+
+        return HttpResponse(
+            render_to_string(
+                "netbox_endpoints/widgets/endpoints_summary_content.html",
+                context,
+                request=request,
+            )
+        )

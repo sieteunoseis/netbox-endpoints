@@ -1,0 +1,30 @@
+{% load i18n %}
+
+{% if error %}
+  <div class="text-center py-2">
+    <span class="text-danger">
+      <i class="mdi mdi-alert"></i> {{ error }}
+    </span>
+  </div>
+{% elif statuses %}
+  <div class="d-flex flex-wrap justify-content-center gap-3 py-2">
+    {% for status in statuses %}
+      <div class="text-center">
+        <span class="badge {{ status.bg_class }} {{ status.text_class }} fs-4 px-3 py-2">
+          {{ status.count }}
+        </span>
+        <div class="mt-1 small fw-bold text-muted">{{ status.label }}</div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="text-center border-top pt-2 mt-2">
+    <span class="text-muted small">{% trans "Total Endpoints" %}: </span>
+    <span class="fw-bold">{{ total }}</span>
+  </div>
+{% else %}
+  <p class="text-center text-muted py-2">
+    <i class="mdi mdi-information-outline"></i>
+    {% trans "No endpoints found." %}
+  </p>
+{% endif %}

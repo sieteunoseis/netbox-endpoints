@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "netbox-endpoints"
-version = "0.1.2"
+version = "0.2.0"
 description = "NetBox plugin for managing wireless and wired endpoints (badges, phones, IoT devices)"
 readme = "README.md"
 license = {text = "Apache-2.0"}
@@ -36,6 +36,7 @@ dev = [
 [project.urls]
 Homepage = "https://github.com/sieteunoseis/netbox-endpoints"
 Repository = "https://github.com/sieteunoseis/netbox-endpoints"
+Issues = "https://github.com/sieteunoseis/netbox-endpoints/issues"
 Documentation = "https://github.com/sieteunoseis/netbox-endpoints/wiki"
 Changelog = "https://github.com/sieteunoseis/netbox-endpoints/blob/main/CHANGELOG.md"
 

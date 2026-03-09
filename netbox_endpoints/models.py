@@ -1,7 +1,6 @@
 """Models for NetBox Endpoints plugin."""
 
-from dcim.models import Device, Interface, Location, Manufacturer, Platform, Site
-from django.contrib.contenttypes.fields import GenericRelation
+from dcim.models import Interface, Location, Manufacturer, Platform, Site
 from django.db import models
 from django.urls import reverse
 from ipam.models import IPAddress
@@ -241,8 +240,6 @@ class Endpoint(NetBoxModel):
 
     def clean(self):
         """Validate the endpoint."""
-        from django.core.exceptions import ValidationError
-
         super().clean()
 
         # Normalize MAC address to uppercase with colons

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-03-09
+
+### Added
+- Dashboard widget: Endpoints Summary showing endpoint counts
+  - Configurable grouping: by status, connection type, or endpoint type
+  - Color-coded badges with proper text contrast
+  - HTMX async loading for non-blocking dashboard page loads
+  - Top 10 display when grouped by endpoint type
+
+### Fixed
+- Removed unused imports (api/serializers.py, models.py, forms.py, urls.py)
+- Added max_version and Issues URL to project metadata
+
 ## [0.1.0] - 2025-02-04
 
 ### Added

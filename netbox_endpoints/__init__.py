@@ -8,7 +8,7 @@ traditional Device model (no rack location, dynamic IPs, etc.).
 
 from netbox.plugins import PluginConfig
 
-__version__ = "0.1.2"
+__version__ = "0.2.0"
 
 
 class EndpointsConfig(PluginConfig):
@@ -22,12 +22,17 @@ class EndpointsConfig(PluginConfig):
     author_email = "jeremy.worden@gmail.com"
     base_url = "endpoints"
     min_version = "4.0.0"
+    max_version = "5.99"
 
     # Required settings
     required_settings = []
 
     # Default configuration values
     default_settings = {}
+
+    def ready(self):
+        super().ready()
+        from . import widgets  # noqa: F401
 
 
 config = EndpointsConfig

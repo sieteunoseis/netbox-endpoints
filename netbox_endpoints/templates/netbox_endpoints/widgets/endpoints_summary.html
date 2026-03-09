@@ -1,0 +1,14 @@
+{% load i18n %}
+
+<div hx-get="{% url 'plugins:netbox_endpoints:widget_endpoints_summary' %}?grouping={{ grouping }}"
+     hx-trigger="load"
+     hx-swap="innerHTML">
+  <div class="d-flex justify-content-center align-items-center py-4">
+    <div class="text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">{% trans "Loading..." %}</span>
+      </div>
+      <div class="mt-2 small text-muted">{% trans "Loading endpoints..." %}</div>
+    </div>
+  </div>
+</div>

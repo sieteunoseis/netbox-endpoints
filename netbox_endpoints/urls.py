@@ -1,6 +1,6 @@
 """URL configuration for NetBox Endpoints plugin."""
 
-from django.urls import include, path
+from django.urls import path
 from netbox.views.generic import ObjectChangeLogView, ObjectJournalView
 
 from . import models, views
@@ -115,6 +115,12 @@ urlpatterns = [
         ObjectJournalView.as_view(),
         name="endpoint_journal",
         kwargs={"model": models.Endpoint},
+    ),
+    # Widget HTMX endpoints
+    path(
+        "widget/endpoints-summary/",
+        views.WidgetEndpointsSummaryContentView.as_view(),
+        name="widget_endpoints_summary",
     ),
 ]
 
