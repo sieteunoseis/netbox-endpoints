@@ -37,6 +37,14 @@ Unlike Devices, Endpoints:
   - Full tag and custom field support
 - **Plugin Integration** - Other plugins can add tabs to endpoint detail pages
 - **REST API** - Full API access at `/api/plugins/netbox-endpoints/`
+- **Dashboard Widget** - Endpoints summary with configurable grouping
+
+## Screenshots
+
+### Dashboard Widget
+Endpoints summary widget with grouping by status, connection type, or endpoint type.
+
+![Dashboard Widget](docs/widget-endpoints-summary.png)
 
 ## Requirements
 
