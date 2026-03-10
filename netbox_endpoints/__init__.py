@@ -8,7 +8,7 @@ traditional Device model (no rack location, dynamic IPs, etc.).
 
 from netbox.plugins import PluginConfig
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 
 class EndpointsConfig(PluginConfig):
