@@ -22,7 +22,7 @@ urlpatterns = [
     path(
         "endpoint-types/import/",
         views.EndpointTypeBulkImportView.as_view(),
-        name="endpointtype_import",
+        name="endpointtype_bulk_import",
     ),
     path(
         "endpoint-types/edit/",
@@ -77,7 +77,7 @@ urlpatterns = [
     path(
         "import/",
         views.EndpointBulkImportView.as_view(),
-        name="endpoint_import",
+        name="endpoint_bulk_import",
     ),
     path(
         "edit/",

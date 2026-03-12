@@ -20,7 +20,7 @@ menu = PluginMenu(
                             permissions=["netbox_endpoints.add_endpoint"],
                         ),
                         PluginMenuButton(
-                            link="plugins:netbox_endpoints:endpoint_import",
+                            link="plugins:netbox_endpoints:endpoint_bulk_import",
                             title="Import",
                             icon_class="mdi mdi-upload",
                             permissions=["netbox_endpoints.add_endpoint"],
