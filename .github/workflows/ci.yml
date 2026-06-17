@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [master, main]
   pull_request:
-    branches: [main]
+    branches: [master, main]
 
 jobs:
   lint:
@@ -28,4 +28,5 @@ jobs:
         run: isort --check-only netbox_endpoints/
 
       - name: Lint with flake8
-        run: flake8 netbox_endpoints/ --max-line-length=120
+        # E203/W503 conflict with black's formatting (e.g. slice colons); ignore per black docs
+        run: flake8 netbox_endpoints/ --max-line-length=120 --extend-ignore=E203,W503
