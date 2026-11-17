@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-17
+
+### Added
+- `top_level_menu` setting (default `True`); set `False` to list this plugin's menu items under the shared "Plugins" menu instead of its own top-level sidebar menu
+
+### Changed
+- Plugin display name shortened to "Endpoints" (was "NetBox Endpoints") so it matches the sidebar menu label
+
 ## [0.2.0] - 2026-03-09
 
 ### Added

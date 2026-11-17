@@ -8,14 +8,14 @@ traditional Device model (no rack location, dynamic IPs, etc.).
 
 from netbox.plugins import PluginConfig
 
-__version__ = "0.2.2"
+__version__ = "0.3.0"
 
 
 class EndpointsConfig(PluginConfig):
     """Plugin configuration for NetBox Endpoints."""
 
     name = "netbox_endpoints"
-    verbose_name = "NetBox Endpoints"
+    verbose_name = "Endpoints"
     description = "Manage wireless and wired endpoints (badges, phones, IoT devices)"
     version = __version__
     author = "Jeremy Worden"
@@ -28,7 +28,9 @@ class EndpointsConfig(PluginConfig):
     required_settings = []
 
     # Default configuration values
-    default_settings = {}
+    default_settings = {
+        "top_level_menu": True,
+    }
 
     def ready(self):
         super().ready()
